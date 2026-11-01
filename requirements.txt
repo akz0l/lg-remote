@@ -1,0 +1,2 @@
+aiowebostv==0.4.2
+getmac==0.9.6
