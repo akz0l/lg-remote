@@ -56,7 +56,7 @@ final class WebSocketChannel: NSObject, URLSessionWebSocketDelegate, @unchecked 
     ) {
         let space = challenge.protectionSpace
         if space.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-            space.host == trustedHost,
+            space.host.caseInsensitiveCompare(trustedHost) == .orderedSame,
             let trust = space.serverTrust
         {
             completionHandler(.useCredential, URLCredential(trust: trust))

@@ -21,7 +21,8 @@ public struct JSONConfigStore: ConfigStore {
 
     public func save(_ config: TVConfig) throws {
         try FileManager.default.createDirectory(
-            at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+            at: url.deletingLastPathComponent(), withIntermediateDirectories: true,
+            attributes: [.posixPermissions: 0o700])
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         try encoder.encode(config).write(to: url, options: .atomic)
