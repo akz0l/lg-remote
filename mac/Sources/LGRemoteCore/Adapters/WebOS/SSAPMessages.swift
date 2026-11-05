@@ -110,12 +110,12 @@ public enum SSAPError: Error, Equatable, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .timeout: return "La TV no respondió a tiempo."
-        case .connectionClosed: return "Se cerró la conexión con la TV."
-        case .unexpectedResponse(let text): return "Respuesta inesperada de la TV: \(text)"
-        case .notPaired: return "La TV ya no reconoce este Mac. Hay que emparejar de nuevo."
-        case .pairingRejected(let text): return "La TV rechazó el emparejamiento: \(text)"
-        case .commandFailed(let text): return "La TV rechazó el comando: \(text)"
+        case .timeout: return "The TV didn’t respond in time."
+        case .connectionClosed: return "The connection to the TV was closed."
+        case .unexpectedResponse(let text): return "Unexpected response from the TV: \(text)"
+        case .notPaired: return "The TV no longer recognizes this Mac. Pair it again."
+        case .pairingRejected(let text): return "The TV rejected pairing: \(text)"
+        case .commandFailed(let text): return "The TV rejected the command: \(text)"
         }
     }
 }

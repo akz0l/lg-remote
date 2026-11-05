@@ -44,7 +44,7 @@ public enum ConfigImportError: Error, Equatable, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .notPaired: return "Ese archivo no tiene una TV emparejada (faltan host o client_key)."
+        case .notPaired: return "That file has no paired TV (host or client_key is missing)."
         }
     }
 }

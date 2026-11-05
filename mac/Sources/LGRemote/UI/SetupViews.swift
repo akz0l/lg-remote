@@ -10,8 +10,8 @@ struct SetupView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Conectá tu TV LG").font(.system(size: 15, weight: .semibold))
-                Text("La TV y este Mac tienen que estar en la misma red.")
+                Text("Connect your LG TV").font(.system(size: 15, weight: .semibold))
+                Text("The TV and this Mac must be on the same network.")
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
             }
@@ -19,18 +19,18 @@ struct SetupView: View {
             if remote.state == .discovering {
                 HStack(spacing: 8) {
                     ProgressView().controlSize(.small)
-                    Text("Buscando TVs LG en la red…").font(.system(size: 12.5))
+                    Text("Searching for LG TVs…").font(.system(size: 12.5))
                 }
                 .frame(maxWidth: .infinity, minHeight: 36, alignment: .leading)
             } else {
-                PrimaryButton(title: "Buscar en la red", symbol: "magnifyingglass") {
+                PrimaryButton(title: "Search the network", symbol: "magnifyingglass") {
                     Task { await remote.discover() }
                 }
             }
 
             if !remote.discoveredHosts.isEmpty {
                 VStack(alignment: .leading, spacing: 6) {
-                    SectionLabel("Encontré varias TVs")
+                    SectionLabel("Several TVs found")
                     ForEach(remote.discoveredHosts, id: \.self) { host in
                         Button {
                             Task { await remote.beginPairing(host: host) }
@@ -49,13 +49,13 @@ struct SetupView: View {
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                SectionLabel("O escribí la IP")
+                SectionLabel("Or enter the IP address")
                 HStack(spacing: Grid.gap) {
                     TextField("192.168.1.50", text: $manualHost)
                         .textFieldStyle(.roundedBorder)
                         .font(.system(size: 12.5, design: .monospaced))
                         .onSubmit(connectManual)
-                    Button("Conectar", action: connectManual)
+                    Button("Connect", action: connectManual)
                         .disabled(manualHost.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
@@ -65,7 +65,7 @@ struct SetupView: View {
             Button {
                 importConfig(into: remote)
             } label: {
-                Label("Importar config.json del CLI…", systemImage: "square.and.arrow.down")
+                Label("Import config.json from the CLI…", systemImage: "square.and.arrow.down")
                     .font(.system(size: 12))
             }
             .buttonStyle(.link)
@@ -89,8 +89,8 @@ struct PinView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Mirá la TV").font(.system(size: 15, weight: .semibold))
-                Text("Escribí el PIN que aparece en la pantalla para emparejar este Mac.")
+                Text("Look at your TV").font(.system(size: 15, weight: .semibold))
+                Text("Enter the PIN shown on the screen to pair this Mac.")
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -105,13 +105,13 @@ struct PinView: View {
                 .glassSurface(RoundedRectangle(cornerRadius: 14, style: .continuous), interactive: false)
                 .focused($focused)
                 .onSubmit(submit)
-                .accessibilityLabel("PIN de la TV")
+                .accessibilityLabel("TV PIN")
 
             HStack {
-                Button("Cancelar") { Task { await remote.cancelPairing() } }
+                Button("Cancel") { Task { await remote.cancelPairing() } }
                     .keyboardShortcut(.cancelAction)
                 Spacer()
-                PrimaryButton(title: "Emparejar", symbol: "link", action: submit)
+                PrimaryButton(title: "Pair", symbol: "link", action: submit)
                     .frame(width: 140)
                     .disabled(pin.trimmingCharacters(in: .whitespaces).isEmpty)
             }
@@ -156,7 +156,7 @@ struct PrimaryButton: View {
 func importConfig(into remote: RemoteController) {
     NSApp.activate(ignoringOtherApps: true)
     let panel = NSOpenPanel()
-    panel.title = "Importar config.json"
+    panel.title = "Import config.json"
     panel.allowedContentTypes = [.json]
     panel.allowsMultipleSelection = false
     guard panel.runModal() == .OK, let url = panel.url else { return }

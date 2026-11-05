@@ -16,7 +16,7 @@ enum PreviewHarness {
         if env["LGREMOTE_APPEARANCE"] == "dark" { NSApp.appearance = NSAppearance(named: .darkAqua) }
         let paired = scenario == "connected" || scenario == "unreachable"
         let config = paired
-            ? TVConfig(host: "192.168.40.118", clientKey: "preview", mac: "64:cb:e9:f8:57:ac",
+            ? TVConfig(host: "192.168.1.50", clientKey: "preview", mac: "aa:bb:cc:dd:ee:ff",
                        appIds: ["youtube": "youtube.leanback.v4", "netflix": "netflix"],
                        hdmiMap: ["1": "HDMI_1", "2": "HDMI_2", "3": "HDMI_3", "4": "HDMI_4"])
             : TVConfig()
@@ -47,6 +47,7 @@ enum PreviewHarness {
         window.titleVisibility = .hidden
         window.title = "LGRemotePreview-\(scenario)"
         window.contentView = effect
+        [.closeButton, .miniaturizeButton, .zoomButton].forEach { window.standardWindowButton($0)?.isHidden = true }
         window.setContentSize(host.fittingSize)
         window.center()
         NSApp.setActivationPolicy(.regular)
@@ -86,7 +87,7 @@ private struct PreviewConnector: TVConnector {
 }
 
 private struct PreviewDiscovery: TVDiscovery {
-    func discover() async -> [String] { ["192.168.40.118"] }
+    func discover() async -> [String] { ["192.168.1.50"] }
 }
 
 private struct PreviewWake: WakeOnLan {

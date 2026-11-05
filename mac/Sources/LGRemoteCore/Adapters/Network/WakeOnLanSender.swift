@@ -6,8 +6,8 @@ public enum WakeOnLanError: Error, Equatable, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .invalidMac(let mac): return "MAC inválida: \(mac)"
-        case .socketFailed(let code): return "No pude enviar el paquete Wake-on-LAN (errno \(code))."
+        case .invalidMac(let mac): return "Invalid MAC address: \(mac)"
+        case .socketFailed(let code): return "Couldn’t send the Wake-on-LAN packet (errno \(code))."
         }
     }
 }

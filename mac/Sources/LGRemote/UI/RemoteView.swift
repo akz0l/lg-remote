@@ -38,7 +38,7 @@ struct RemoteView: View {
 
     private var inputsBus: some View {
         VStack(alignment: .leading, spacing: 6) {
-            SectionLabel("Entrada")
+            SectionLabel("Input")
             HStack(spacing: Grid.gap) {
                 ForEach(1...4, id: \.self) { n in
                     source(.hdmi(n), title: "HDMI \(n)", command: .hdmi(n), width: Grid.column)
@@ -76,9 +76,9 @@ struct RemoteView: View {
         return HStack(spacing: Grid.gap) {
             VStack(spacing: Grid.gap) {
                 let keyHeight = (height - Grid.gap * 2) / 3
-                KeyButton(command: .button(.back), title: "Atrás", height: keyHeight)
-                KeyButton(command: .button(.home), title: "Inicio", height: keyHeight)
-                KeyButton(command: .button(.quickMenu), title: "Ajustes", height: keyHeight)
+                KeyButton(command: .button(.back), title: "Back", height: keyHeight)
+                KeyButton(command: .button(.home), title: "Home", height: keyHeight)
+                KeyButton(command: .button(.quickMenu), title: "Settings", height: keyHeight)
             }
             .frame(width: Grid.column)
 
@@ -92,13 +92,13 @@ struct RemoteView: View {
 
     private var footer: some View {
         HStack(spacing: Grid.gap) {
-            KeyButton(command: .button(.mute), title: "Silencio", symbol: "speaker.slash", height: 30)
+            KeyButton(command: .button(.mute), title: "Mute", symbol: "speaker.slash", height: 30)
                 .frame(width: Grid.span(2))
                 .disabled(!reachable)
                 .opacity(reachable ? 1 : 0.4)
             Spacer(minLength: 0)
             // Isolated in the corner so it is not hit by accident.
-            KeyButton(command: .powerOff, symbol: "power", accessibilityName: "Apagar TV", height: 30)
+            KeyButton(command: .powerOff, symbol: "power", accessibilityName: "Power off TV", height: 30)
                 .frame(width: Grid.column)
                 .disabled(!reachable)
                 .opacity(reachable ? 1 : 0.4)
@@ -151,19 +151,19 @@ struct DirectionPad: View {
         let ok = diameter * 0.42
         let reach = diameter * 0.355
         ZStack {
-            InsetKey(command: .button(.up), symbol: "chevron.up", name: "Arriba").offset(y: -reach)
-            InsetKey(command: .button(.down), symbol: "chevron.down", name: "Abajo").offset(y: reach)
-            InsetKey(command: .button(.left), symbol: "chevron.left", name: "Izquierda").offset(x: -reach)
-            InsetKey(command: .button(.right), symbol: "chevron.right", name: "Derecha").offset(x: reach)
+            InsetKey(command: .button(.up), symbol: "chevron.up", name: "Up").offset(y: -reach)
+            InsetKey(command: .button(.down), symbol: "chevron.down", name: "Down").offset(y: reach)
+            InsetKey(command: .button(.left), symbol: "chevron.left", name: "Left").offset(x: -reach)
+            InsetKey(command: .button(.right), symbol: "chevron.right", name: "Right").offset(x: reach)
 
-            KeyButton(command: .button(.enter), title: "OK", accessibilityName: "OK, seleccionar", height: ok, showsLegend: false)
+            KeyButton(command: .button(.enter), title: "OK", accessibilityName: "OK, select", height: ok, showsLegend: false)
                 .frame(width: ok)
                 .clipShape(Circle())
         }
         .frame(width: diameter, height: diameter)
         .glassSurface(Circle(), interactive: false)
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("Navegación")
+        .accessibilityLabel("Navigation")
     }
 }
 
@@ -174,14 +174,14 @@ struct VolumeRocker: View {
     var body: some View {
         let half = CGSize(width: 46, height: height / 2 - 10)
         VStack(spacing: 0) {
-            InsetKey(command: .volumeUp, symbol: "plus", name: "Subir volumen", size: half)
+            InsetKey(command: .volumeUp, symbol: "plus", name: "Volume up", size: half)
             Text("VOL")
                 .font(.system(size: 9, weight: .semibold))
                 .tracking(0.6)
                 .foregroundStyle(.secondary)
                 .frame(height: 20)
                 .accessibilityHidden(true)
-            InsetKey(command: .volumeDown, symbol: "minus", name: "Bajar volumen", size: half)
+            InsetKey(command: .volumeDown, symbol: "minus", name: "Volume down", size: half)
         }
         .frame(width: 46, height: height)
         .glassSurface(Capsule(), interactive: false)
@@ -196,17 +196,17 @@ struct UnreachableBar: View {
     var body: some View {
         HStack(spacing: 8) {
             VStack(alignment: .leading, spacing: 1) {
-                Text("La TV no responde").font(.system(size: 12.5, weight: .semibold))
-                Text(remote.canWake ? "Puede estar apagada." : "¿Está encendida y en la misma red?")
+                Text("The TV isn’t responding").font(.system(size: 12.5, weight: .semibold))
+                Text(remote.canWake ? "It may be turned off." : "Is it on and on the same network?")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
             }
             Spacer(minLength: 0)
             if remote.canWake {
-                KeyButton(command: .wake, title: "Encender", symbol: "power", height: 32)
+                KeyButton(command: .wake, title: "Power on", symbol: "power", height: 32)
                     .frame(width: Grid.span(2) - 24)
             } else {
-                Button("Reintentar") { Task { await remote.connect() } }
+                Button("Retry") { Task { await remote.connect() } }
             }
         }
     }

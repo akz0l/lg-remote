@@ -22,7 +22,7 @@ struct RemotePanel: View {
         case .needsSetup, .discovering:
             SetupView()
         case .connecting where !remote.config.isPaired:
-            WorkingView(text: "Pidiendo el PIN a la TV…")
+            WorkingView(text: "Asking the TV for a PIN…")
         case .failed(let message) where !remote.config.isPaired:
             VStack(alignment: .leading, spacing: 12) {
                 Label(message, systemImage: "exclamationmark.triangle")
@@ -57,7 +57,7 @@ struct StatusHeader: View {
         HStack(spacing: 8) {
             indicator
             VStack(alignment: .leading, spacing: 1) {
-                Text("TV LG").font(.system(size: 13, weight: .semibold))
+                Text("LG TV").font(.system(size: 13, weight: .semibold))
                 Text(remote.notice ?? statusText)
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
@@ -74,13 +74,13 @@ struct StatusHeader: View {
     private var statusText: String {
         let host = remote.config.host.map { " · \($0)" } ?? ""
         switch remote.state {
-        case .connected: return "Conectada\(host)"
-        case .connecting: return "Conectando…"
-        case .waking: return "Encendiendo…"
-        case .unreachable: return "Sin respuesta\(host)"
-        case .discovering: return "Buscando…"
-        case .awaitingPin: return "Emparejando"
-        case .needsSetup: return "Sin configurar"
+        case .connected: return "Connected\(host)"
+        case .connecting: return "Connecting…"
+        case .waking: return "Powering on…"
+        case .unreachable: return "Not responding\(host)"
+        case .discovering: return "Searching…"
+        case .awaitingPin: return "Pairing"
+        case .needsSetup: return "Not set up"
         case .failed(let message): return message
         }
     }
@@ -113,16 +113,16 @@ struct StatusHeader: View {
     private var menu: some View {
         Menu {
             if remote.config.isPaired {
-                Button("Reconectar") { Task { await remote.connect() } }
-                Button("Encender TV (Wake-on-LAN)") { Task { await remote.wake() } }
+                Button("Reconnect") { Task { await remote.connect() } }
+                Button("Power On TV (Wake-on-LAN)") { Task { await remote.wake() } }
                     .disabled(!remote.canWake)
                 Divider()
             }
-            Button("Importar config.json…") { importConfig(into: remote) }
-            Button("Olvidar esta TV") { Task { await remote.forgetTV() } }
+            Button("Import config.json…") { importConfig(into: remote) }
+            Button("Forget This TV") { Task { await remote.forgetTV() } }
                 .disabled(remote.config.host == nil)
             Divider()
-            Button("Salir de LG Remote") { NSApp.terminate(nil) }
+            Button("Quit LG Remote") { NSApp.terminate(nil) }
                 .keyboardShortcut("q")
         } label: {
             Image(systemName: "ellipsis")
@@ -134,6 +134,6 @@ struct StatusHeader: View {
         .buttonStyle(.plain)
         .menuIndicator(.hidden)
         .fixedSize()
-        .accessibilityLabel("Opciones")
+        .accessibilityLabel("Options")
     }
 }

@@ -40,7 +40,7 @@ struct InsetKey: View {
         .buttonStyle(.plain)
         .modifier(CommandFlash(command: command))
         .accessibilityLabel(name)
-        .accessibilityHint("Atajo: \(KeyBindings.label(for: command))")
+        .accessibilityHint("Shortcut: \(KeyBindings.label(for: command))")
     }
 }
 
@@ -84,7 +84,7 @@ struct KeyButton: View {
         .glassSurface(shape, live: live)
         .modifier(CommandFlash(command: command))
         .accessibilityLabel(accessibilityName ?? title)
-        .accessibilityHint("Atajo: \(KeyBindings.label(for: command))")
+        .accessibilityHint("Shortcut: \(KeyBindings.label(for: command))")
         .accessibilityAddTraits(live ? .isSelected : [])
     }
 }

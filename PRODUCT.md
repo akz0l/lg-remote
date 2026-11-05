@@ -21,7 +21,7 @@ Menu bar panel opened briefly while doing other work; the TV is across the room.
 ## Capabilities and Constraints
 - Actions and shortcuts mirror the original CLI: arrows navigate, Return = OK, Delete = Back, H Home, S Quick settings, +/- volume, M mute, 1–4 HDMI, Y YouTube, N Netflix, P power off, W power on (Wake-on-LAN). Esc closes the panel.
 - Power on requires the TV's MAC (captured automatically on first connection).
-- UI copy is Spanish, matching the existing project.
+- UI copy is English (public open-source project).
 
 ## Brand Commitments
 Product name "LG Remote" is descriptive only; do not use LG's logo or wordmark, nor the Claude logo, as the menu bar icon.

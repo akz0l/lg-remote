@@ -9,7 +9,7 @@ public final class RemoteController {
     public private(set) var config: TVConfig
     /// TVs found by the last discovery when there was more than one.
     public private(set) var discoveredHosts: [String] = []
-    /// Short-lived message for the user ("HDMI 2", "No encontré el HDMI 3", …).
+    /// Short-lived message for the user ("HDMI 2", "HDMI 3 isn’t available", …).
     public private(set) var notice: String?
     /// Last command sent, so the UI can briefly highlight the matching control.
     public private(set) var lastCommand: RemoteCommand?
@@ -73,7 +73,7 @@ public final class RemoteController {
         switch hosts.count {
         case 0:
             state = .needsSetup
-            show("No encontré ninguna TV LG en la red. Escribí la IP a mano.")
+            show("No LG TV found on the network. Enter its IP address.")
         case 1:
             await beginPairing(host: hosts[0])
         default:
@@ -215,7 +215,7 @@ public final class RemoteController {
 
         if session == nil, config.isPaired { await connect() }
         guard let session else {
-            show("La TV no responde. Si está apagada, encendela con W.")
+            show("The TV isn’t responding. If it’s off, press W to power it on.")
             return
         }
         do {
@@ -232,7 +232,7 @@ public final class RemoteController {
         case .volumeDown: try await session.volumeDown()
         case .hdmi(let n):
             guard let input = config.hdmiMap[String(n)] else {
-                show("No encontré el HDMI \(n) en la TV.")
+                show("HDMI \(n) isn’t available on this TV.")
                 return
             }
             try await session.switchInput(id: input)
@@ -253,7 +253,7 @@ public final class RemoteController {
         case .powerOff:
             try await session.powerOff()
             liveSource = nil
-            show("Apagando la TV")
+            show("Powering off")
         case .wake:
             break
         }
@@ -262,7 +262,7 @@ public final class RemoteController {
     /// Wake-on-LAN, then poll until the TV accepts a connection (like the CLI's `w`).
     public func wake() async {
         guard let mac = config.mac else {
-            show("Todavía no conozco la MAC de la TV. Conectate una vez con la TV encendida.")
+            show("The TV’s MAC address is unknown. Connect once while the TV is on.")
             return
         }
         do {
@@ -284,7 +284,7 @@ public final class RemoteController {
             state = .waking
         }
         state = .unreachable
-        show("Envié el encendido pero la TV no respondió. Revisá que \"Encender con el móvil\" esté activado.")
+        show("Power-on was sent but the TV didn’t respond. Check that “Turn on via Wi-Fi” is enabled on the TV.")
     }
 
     // MARK: Helpers
@@ -293,7 +293,7 @@ public final class RemoteController {
         do {
             try store.save(config)
         } catch {
-            show("No pude guardar la configuración: \(error.localizedDescription)")
+            show("Couldn’t save settings: \(error.localizedDescription)")
         }
     }
 

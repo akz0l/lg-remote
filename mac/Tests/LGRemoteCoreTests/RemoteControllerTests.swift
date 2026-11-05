@@ -191,7 +191,7 @@ let paired = TVConfig(host: "10.0.0.5", clientKey: "key", hdmiMap: ["2": "HDMI_2
         let h = Harness(config: paired)
         await h.controller.start()
         await h.controller.perform(.hdmi(3))
-        #expect(h.controller.notice == "No encontré el HDMI 3 en la TV.")
+        #expect(h.controller.notice == "HDMI 3 isn’t available on this TV.")
         #expect(await h.connector.session.calls.isEmpty)
     }
 
