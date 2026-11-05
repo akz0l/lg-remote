@@ -1,0 +1,36 @@
+name: TV compatibility report
+description: Tell us whether LG Remote works with your TV
+labels: [compatibility]
+body:
+  - type: input
+    id: tv
+    attributes:
+      label: TV model and webOS version
+      placeholder: e.g. LG 43UR8000 · webOS 23
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Does it work?
+      options:
+        - "Yes, everything works"
+        - "Partially (details below)"
+        - "No"
+    validations:
+      required: true
+  - type: checkboxes
+    id: features
+    attributes:
+      label: What did you test?
+      options:
+        - label: Pairing with PIN
+        - label: Navigation and volume
+        - label: HDMI switching
+        - label: YouTube / Netflix
+        - label: Power off
+        - label: Power on (Wake-on-LAN)
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes

@@ -1,0 +1,30 @@
+name: Bug report
+description: Something doesn't work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: input
+    id: tv
+    attributes:
+      label: TV model and webOS version
+      placeholder: e.g. OLED55C3 · webOS 23
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and LG Remote version
+      placeholder: e.g. macOS 26.1 · LG Remote 1.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or extra context
+      description: Please don't paste your config.json — it contains the key that controls your TV.
