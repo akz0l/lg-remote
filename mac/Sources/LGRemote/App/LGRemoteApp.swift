@@ -17,8 +17,8 @@ struct LGRemoteApp: App {
             RemotePanel()
                 .environment(remote)
         } label: {
-            // Template symbol: follows the menu bar's light/dark appearance like system icons.
-            Image(systemName: remote.isConnected ? "av.remote.fill" : "av.remote")
+            // Template image of the app's mark: the tally bar appears only while connected.
+            Image(nsImage: MenuBarIcon.image(live: remote.isConnected))
                 .accessibilityLabel("LG Remote")
                 .task {
                     // The label exists from launch, so this connects before the panel is opened.
