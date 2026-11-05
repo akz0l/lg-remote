@@ -29,6 +29,29 @@ public enum RemoteCommand: Hashable, Sendable {
     }
 }
 
+/// What is on screen right now, so the UI can mark it "on air".
+public enum LiveSource: Equatable, Sendable {
+    case hdmi(Int)
+    case youtube
+    case netflix
+
+    /// Maps a webOS foreground app id to a source the remote can show.
+    public init?(appId: String, config: TVConfig) {
+        let low = appId.lowercased()
+        if let range = low.range(of: "hdmi"), let n = low[range.upperBound...].first.flatMap({ Int(String($0)) }),
+            (1...4).contains(n)
+        {
+            self = .hdmi(n)
+        } else if appId == config.appIds["youtube"] || low.contains("youtube") {
+            self = .youtube
+        } else if appId == config.appIds["netflix"] || low.contains("netflix") {
+            self = .netflix
+        } else {
+            return nil
+        }
+    }
+}
+
 /// Keyboard input, decoupled from AppKit/SwiftUI key types.
 public enum KeyInput: Hashable, Sendable {
     case arrowUp

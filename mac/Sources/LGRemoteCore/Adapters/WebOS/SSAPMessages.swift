@@ -38,6 +38,7 @@ enum SSAPURI {
     static let listApps = "ssap://com.webos.applicationManager/listApps"
     static let listInputs = "ssap://tv/getExternalInputList"
     static let setPin = "ssap://pairing/setPin"
+    static let foregroundApp = "ssap://com.webos.applicationManager/getForegroundAppInfo"
 }
 
 /// Builds the JSON text frames of the SSAP protocol.

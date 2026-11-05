@@ -5,3 +5,5 @@ config.json
 mac/.build/
 mac/build/
 .swiftpm/
+.impeccable/mocks/
+.impeccable/review/

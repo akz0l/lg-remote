@@ -20,6 +20,8 @@ actor FakeSession: TVSession {
     func switchInput(id: String) async throws { calls.append("input:\(id)") }
     func listApps() async throws -> [TVApp] { apps }
     func listInputs() async throws -> [TVInput] { inputs }
+    var foreground: String? = "com.webos.app.hdmi2"
+    func foregroundAppId() async throws -> String? { foreground }
     func waitUntilClosed() async {
         if closed { return }
         await withCheckedContinuation { closeWaiters.append($0) }
@@ -117,6 +119,16 @@ let paired = TVConfig(host: "10.0.0.5", clientKey: "key", hdmiMap: ["2": "HDMI_2
         #expect(h.store.config.mac == "aa:bb:cc:dd:ee:ff")
         #expect(h.store.config.appIds["youtube"] == "youtube.leanback.v4")
         #expect(h.store.config.hdmiMap == ["2": "HDMI_2"])
+        #expect(h.controller.liveSource == .hdmi(2))
+    }
+
+    @Test func switchingInputMovesTheLiveSource() async {
+        let h = Harness(config: paired)
+        await h.controller.start()
+        await h.controller.perform(.youtube)
+        #expect(h.controller.liveSource == .youtube)
+        await h.controller.perform(.hdmi(2))
+        #expect(h.controller.liveSource == .hdmi(2))
     }
 
     @Test func rejectedKeyClearsPairing() async {

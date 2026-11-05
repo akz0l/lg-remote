@@ -39,6 +39,17 @@ import Testing
     }
 }
 
+@Suite struct LiveSourceTests {
+    let config = TVConfig(appIds: ["youtube": "youtube.leanback.v4", "netflix": "netflix"])
+
+    @Test func mapsForegroundApps() {
+        #expect(LiveSource(appId: "com.webos.app.hdmi3", config: config) == .hdmi(3))
+        #expect(LiveSource(appId: "youtube.leanback.v4", config: config) == .youtube)
+        #expect(LiveSource(appId: "netflix", config: config) == .netflix)
+        #expect(LiveSource(appId: "com.webos.app.livetv", config: config) == nil)
+    }
+}
+
 @Suite struct TVMetadataTests {
     @Test func detectsAppsAndHdmiInputs() {
         var config = TVConfig()

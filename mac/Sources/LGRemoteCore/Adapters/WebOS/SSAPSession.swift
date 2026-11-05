@@ -82,6 +82,10 @@ actor SSAPSession: TVSession {
         }
     }
 
+    func foregroundAppId() async throws -> String? {
+        try await request(SSAPURI.foregroundApp).payload["appId"] as? String
+    }
+
     func waitUntilClosed() async {
         if isClosed { return }
         await withCheckedContinuation { closeWaiters.append($0) }

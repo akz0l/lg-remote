@@ -13,6 +13,10 @@ public final class RemoteController {
     public private(set) var notice: String?
     /// Last command sent, so the UI can briefly highlight the matching control.
     public private(set) var lastCommand: RemoteCommand?
+    /// Increments on every command, so repeating the same key still triggers feedback.
+    public private(set) var commandCount = 0
+    /// Source currently on screen, when known.
+    public private(set) var liveSource: LiveSource?
 
     private let connector: any TVConnector
     private let discovery: any TVDiscovery
@@ -183,6 +187,12 @@ public final class RemoteController {
         let inputs = (try? await session.listInputs()) ?? []
         TVMetadata.apply(apps: apps, inputs: inputs, to: &config)
         persist()
+        await refreshLiveSource(session: session)
+    }
+
+    private func refreshLiveSource(session: any TVSession) async {
+        guard let appId = try? await session.foregroundAppId() else { return }
+        liveSource = LiveSource(appId: appId, config: config)
     }
 
     private func closeSession() async {
@@ -200,6 +210,7 @@ public final class RemoteController {
 
     public func perform(_ command: RemoteCommand) async {
         lastCommand = command
+        commandCount += 1
         if command == .wake { return await wake() }
 
         if session == nil, config.isPaired { await connect() }
@@ -225,9 +236,11 @@ public final class RemoteController {
                 return
             }
             try await session.switchInput(id: input)
+            liveSource = .hdmi(n)
             show("HDMI \(n)")
         case .youtube:
             try await session.launchApp(id: config.appIds["youtube"] ?? TVConfig.defaultYouTubeId)
+            liveSource = .youtube
             show("YouTube")
         case .netflix:
             if let id = config.appIds["netflix"] {
@@ -235,9 +248,11 @@ public final class RemoteController {
             } else {
                 try await session.press(.netflix)
             }
+            liveSource = .netflix
             show("Netflix")
         case .powerOff:
             try await session.powerOff()
+            liveSource = nil
             show("Apagando la TV")
         case .wake:
             break

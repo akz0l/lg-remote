@@ -11,6 +11,8 @@ public protocol TVSession: Sendable {
     func switchInput(id: String) async throws
     func listApps() async throws -> [TVApp]
     func listInputs() async throws -> [TVInput]
+    /// App id currently on screen (HDMI inputs appear as `com.webos.app.hdmiN`).
+    func foregroundAppId() async throws -> String?
     /// Returns when the connection drops for any reason.
     func waitUntilClosed() async
     func close() async
